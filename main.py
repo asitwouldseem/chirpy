@@ -14,9 +14,9 @@ RX_PIN = 17
 BUSY_PIN = 22
 
 # Other constants
-DEFAULT_VOLUME = 30
+DEFAULT_VOLUME = 20
 INTERVAL_START = 5
-INTERVAL_END = 10
+INTERVAL_END = 25
 
 # Setup I/O
 player = DFPlayer(UART_INSTANCE, TX_PIN, RX_PIN, BUSY_PIN)
@@ -32,13 +32,18 @@ def meow():
     
     player.playTrack(1,1)
 
+    # Eh, I hate this. But works for now.
+    if button.value():
+        print("Button pressed")
+        user_input()
+
 def user_input():
     global device_armed
     
     device_armed = not device_armed
     
     # Device armed.
-    if device_armed == True:
+    while device_armed == True:
         player.playTrack(2,1)
         meow()
     
@@ -47,7 +52,8 @@ def user_input():
         player.playTrack(2,2)
 
 def init():    
-    player.setVolume(DEFAULT_VOLUME)    
+    player.setVolume(DEFAULT_VOLUME)
+    
     main()
     
 def main():
